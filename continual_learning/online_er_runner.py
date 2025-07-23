@@ -12,7 +12,6 @@ import utils
 def mask_classes(dataset, output: torch.Tensor, k: int) -> None:
 
     if dataset == "splitcifar100":
-        print("dataset is:", dataset)
         N_CLASSES_PER_TASK = 10
         N_TASKS = 10
     elif dataset == "splitminiimagenet":

@@ -9,6 +9,29 @@ from continual_learning import online_rho_buffer
 import utils
 
 
+def mask_classes(outputs: torch.Tensor, dataset: ContinualDataset, k: int) -> None:
+    """
+    Given the output tensor, the dataset at hand and the current task,
+    masks the former by setting the responses for the other tasks at -inf.
+    It is used to obtain the results for the task-il setting.
+    :param outputs: the output tensor
+    :param dataset: the continual dataset
+    :param k: the task index
+    """
+    outputs[:, 0:k * dataset.N_CLASSES_PER_TASK] = -float('inf')
+    outputs[:, (k + 1) * dataset.N_CLASSES_PER_TASK:
+               dataset.N_TASKS * dataset.N_CLASSES_PER_TASK] = -float('inf')
+
+
+def backward_transfer(results):
+    n_tasks = len(results)
+    li = []
+    for i in range(n_tasks - 1):
+        li.append(results[-1][i] - results[i][i])
+
+    return np.mean(li)
+
+
 class OnlineERRunner(object):
     def __init__(self, local_path, buffer_size, model_params, use_cuda, transforms, selection_params, train_params,
                  update_mode, remove_mode, seed, scheduler_params=None):

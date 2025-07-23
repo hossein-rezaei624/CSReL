@@ -101,7 +101,7 @@ def main(opts):
             verbose=True,
             do_evaluation=True
         )
-        print('accuracies on task', i, 'is:', accs, np.mean(accs))
+        ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
         runner.next_task(dump_buffer=True)
 
 

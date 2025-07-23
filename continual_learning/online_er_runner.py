@@ -9,18 +9,21 @@ from continual_learning import online_rho_buffer
 import utils
 
 
-def mask_classes(outputs: torch.Tensor, dataset: ContinualDataset, k: int) -> None:
-    """
-    Given the output tensor, the dataset at hand and the current task,
-    masks the former by setting the responses for the other tasks at -inf.
-    It is used to obtain the results for the task-il setting.
-    :param outputs: the output tensor
-    :param dataset: the continual dataset
-    :param k: the task index
-    """
-    outputs[:, 0:k * dataset.N_CLASSES_PER_TASK] = -float('inf')
-    outputs[:, (k + 1) * dataset.N_CLASSES_PER_TASK:
-               dataset.N_TASKS * dataset.N_CLASSES_PER_TASK] = -float('inf')
+def mask_classes(dataset, output: torch.Tensor, k: int) -> None:
+
+    if dataset == "splitcifar100":
+        N_CLASSES_PER_TASK = 10
+        N_TASKS = 10
+    elif dataset == "splitminiimagenet":
+        N_CLASSES_PER_TASK = 20
+        N_TASKS = 5
+    elif dataset == "splittinyimagenet":
+        N_CLASSES_PER_TASK = 20
+        N_TASKS = 10
+    
+    output[:, 0:k * N_CLASSES_PER_TASK] = -float('inf')
+    output[:, (k + 1) * N_CLASSES_PER_TASK:
+               N_TASKS * N_CLASSES_PER_TASK] = -float('inf')
 
 
 def backward_transfer(results):
@@ -65,6 +68,7 @@ class OnlineERRunner(object):
         self.to_pil = torchvision.transforms.ToPILImage()
         self.seen_tasks = 0
         self.results = []
+        self.results_task_hossein = []
 
     def train_single_task(self, dataset_name_hossein, train_loader, eval_loaders, verbose=True, do_evaluation=True):
         self.model.train()
@@ -129,40 +133,58 @@ class OnlineERRunner(object):
                 scheduler.step()
             ##print('finish training epoch:', i)
             if do_evaluation and i % 10 == 0:
-                accs, losses = self.evaluate_model(dataset_name_hossein, eval_loaders=eval_loaders, on_cuda=self.use_cuda)
+                accs, losses, accs_task_hossein = self.evaluate_model(dataset_name_hossein, eval_loaders=eval_loaders, on_cuda=self.use_cuda)
                 ##print('\taccuracy on test is:', np.mean(accs), accs, losses)
                 ##if len(accs) > 1:
                 ##    print('\tprevious tasks accuracy is:', np.mean(accs[:-1]))
         if self.train_params['use_cuda']:
             self.model.cpu()
-        accs, losses = self.evaluate_model(dataset_name_hossein, eval_loaders=eval_loaders, on_cuda=False)
+        accs, losses, accs_task_hossein = self.evaluate_model(dataset_name_hossein, eval_loaders=eval_loaders, on_cuda=False)
         ##print('\tlosses on testset is:', losses)
         self.results.append(accs)
+        self.results_task_hossein.append(accs_task_hossein)
+        print("\n", "backward_transfer(self.results_task_hossein)", backward_transfer(self.results_task_hossein))
+        print("self.results_task_hossein", self.results_task_hossein)
+        print("accs_task_hossein", accs_task_hossein)
+        print("np.mean(accs_task_hossein)", np.mean(accs_task_hossein))
+        print("\n", "self.results", self.results)
         return accs
 
     def evaluate_model(self, dataset_name_hossein, eval_loaders, on_cuda=False):
         status = self.model.training
         self.model.eval()
         accs = []
+        accs_task_hossein = []
         eval_loss_fn = torch.nn.CrossEntropyLoss(reduction='sum')
         losses = []
         with torch.no_grad():
             for i in range(self.seen_tasks + 1):
                 loss = 0
                 correct = 0
+                correct_task_hossein = 0
                 for data, target in eval_loaders[i]:
                     if on_cuda:
                         data, target = data.cuda(), target.cuda()
                     output = self.model(data)
+                    
                     loss += eval_loss_fn(output, target).cpu().item()
                     pred = output.argmax(dim=1, keepdim=True)
                     correct += pred.eq(target.view_as(pred)).sum().item()
+
+                    mask_classes(dataset_name_hossein, output, i)
+                    pred_task_hossein = output.argmax(dim=1, keepdim=True)
+                    correct_task_hossein += pred_task_hossein.eq(target.view_as(pred_task_hossein)).sum().item()
+
+
+                
                 avg_acc = 100. * correct / len(eval_loaders[i].dataset)
+                avg_acc_task_hossein = 100. * correct_task_hossein / len(eval_loaders[i].dataset)
                 avg_loss = loss / len(eval_loaders[i].dataset)
                 accs.append(avg_acc)
+                accs_task_hossein.append(avg_acc_task_hossein)
                 losses.append(avg_loss)
         self.model.train(status)
-        return accs, losses
+        return accs, losses, accs_task_hossein
 
     def next_task(self, dump_buffer=False):
         self.buffer.next_task()

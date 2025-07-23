@@ -80,8 +80,8 @@ class OnlineERRunner(object):
                     out_logits = self.model(aug_sp)
                     ce_losses = loss_fn(out_logits, lab)
                     loss = torch.mean(ce_losses)
-                if verbose and step % 100 == 0:
-                    print('loss at step ', step, 'is:', loss.item())
+                ##if verbose and step % 100 == 0:
+                ##    print('loss at step ', step, 'is:', loss.item())
                 opt.zero_grad()
                 loss.backward()
                 opt.step()
@@ -104,16 +104,16 @@ class OnlineERRunner(object):
                 step += 1
             if scheduler is not None:
                 scheduler.step()
-            print('finish training epoch:', i)
+            ##print('finish training epoch:', i)
             if do_evaluation and i % 10 == 0:
                 accs, losses = self.evaluate_model(eval_loaders=eval_loaders, on_cuda=self.use_cuda)
-                print('\taccuracy on test is:', np.mean(accs), accs, losses)
-                if len(accs) > 1:
-                    print('\tprevious tasks accuracy is:', np.mean(accs[:-1]))
+                ##print('\taccuracy on test is:', np.mean(accs), accs, losses)
+                ##if len(accs) > 1:
+                ##    print('\tprevious tasks accuracy is:', np.mean(accs[:-1]))
         if self.train_params['use_cuda']:
             self.model.cpu()
         accs, losses = self.evaluate_model(eval_loaders=eval_loaders, on_cuda=False)
-        print('\tlosses on testset is:', losses)
+        ##print('\tlosses on testset is:', losses)
         self.results.append(accs)
         return accs
 

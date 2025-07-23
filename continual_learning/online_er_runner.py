@@ -143,7 +143,7 @@ class OnlineERRunner(object):
         ##print('\tlosses on testset is:', losses)
         self.results.append(accs)
         self.results_task_hossein.append(accs_task_hossein)
-        print("\n", "backward_transfer(self.results_task_hossein)", backward_transfer(self.results_task_hossein))
+        print("backward_transfer(self.results_task_hossein)", backward_transfer(self.results_task_hossein))
         print("self.results_task_hossein", self.results_task_hossein)
         print("accs_task_hossein", accs_task_hossein)
         print("np.mean(accs_task_hossein)", np.mean(accs_task_hossein))

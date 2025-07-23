@@ -12,12 +12,15 @@ import utils
 def mask_classes(dataset, output: torch.Tensor, k: int) -> None:
 
     if dataset == "splitcifar100":
+        print("dataset is:", dataset)
         N_CLASSES_PER_TASK = 10
         N_TASKS = 10
     elif dataset == "splitminiimagenet":
+        print("dataset is:", dataset)
         N_CLASSES_PER_TASK = 20
         N_TASKS = 5
     elif dataset == "splittinyimagenet":
+        print("dataset is:", dataset)
         N_CLASSES_PER_TASK = 20
         N_TASKS = 10
     
@@ -143,11 +146,10 @@ class OnlineERRunner(object):
         ##print('\tlosses on testset is:', losses)
         self.results.append(accs)
         self.results_task_hossein.append(accs_task_hossein)
-        print("backward_transfer(self.results_task_hossein)", backward_transfer(self.results_task_hossein))
-        print("self.results_task_hossein", self.results_task_hossein)
-        print("accs_task_hossein", accs_task_hossein, np.mean(accs_task_hossein))
-        print("\n", "backward_transfer(self.results)", backward_transfer(self.results))
-        print("self.results", self.results)
+        print("Task", self.seen_tasks + 1, ":  Class ACC:", np.mean(accs), "     Task ACC:", np.mean(accs_task_hossein), "\n")
+        if self.seen_tasks > 8:
+            print("Class BWT:", backward_transfer(self.results), "     Task BWT:", backward_transfer(self.results_task_hossein), "\n")
+            print("fullclasss", self.results, "fulltask", self.results_task_hossein)
         return accs
 
     def evaluate_model(self, dataset_name_hossein, eval_loaders, on_cuda=False):

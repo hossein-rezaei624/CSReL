@@ -148,7 +148,8 @@ class OnlineERRunner(object):
         print("Task", self.seen_tasks + 1, ":  Class ACC:", np.mean(accs), "     Task ACC:", np.mean(accs_task_hossein), "\n")
         if self.seen_tasks > 8:
             print("Class BWT:", backward_transfer(self.results), "     Task BWT:", backward_transfer(self.results_task_hossein), "\n")
-            print("fullclasss", self.results, "fulltask", self.results_task_hossein)
+            print("fullclasss", self.results, "\n")
+            print("fulltask", self.results_task_hossein)
         return accs
 
     def evaluate_model(self, dataset_name_hossein, eval_loaders, on_cuda=False):

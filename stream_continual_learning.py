@@ -95,7 +95,7 @@ def main(opts):
             seed=opts.seed
         )
     for i in range(len(train_loaders)):
-        accs = runner.train_single_task(
+        accs = runner.train_single_task(opts.dataset, 
             train_loader=train_loaders[i],
             eval_loaders=test_loaders,
             verbose=True,

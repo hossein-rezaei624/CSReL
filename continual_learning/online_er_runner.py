@@ -66,7 +66,7 @@ class OnlineERRunner(object):
         self.seen_tasks = 0
         self.results = []
 
-    def train_single_task(self, train_loader, eval_loaders, verbose=True, do_evaluation=True):
+    def train_single_task(self, dataset_name_hossein, train_loader, eval_loaders, verbose=True, do_evaluation=True):
         self.model.train()
         if self.train_params['use_cuda']:
             self.model.cuda()
@@ -129,18 +129,18 @@ class OnlineERRunner(object):
                 scheduler.step()
             ##print('finish training epoch:', i)
             if do_evaluation and i % 10 == 0:
-                accs, losses = self.evaluate_model(eval_loaders=eval_loaders, on_cuda=self.use_cuda)
+                accs, losses = self.evaluate_model(dataset_name_hossein, eval_loaders=eval_loaders, on_cuda=self.use_cuda)
                 ##print('\taccuracy on test is:', np.mean(accs), accs, losses)
                 ##if len(accs) > 1:
                 ##    print('\tprevious tasks accuracy is:', np.mean(accs[:-1]))
         if self.train_params['use_cuda']:
             self.model.cpu()
-        accs, losses = self.evaluate_model(eval_loaders=eval_loaders, on_cuda=False)
+        accs, losses = self.evaluate_model(dataset_name_hossein, eval_loaders=eval_loaders, on_cuda=False)
         ##print('\tlosses on testset is:', losses)
         self.results.append(accs)
         return accs
 
-    def evaluate_model(self, eval_loaders, on_cuda=False):
+    def evaluate_model(self, dataset_name_hossein, eval_loaders, on_cuda=False):
         status = self.model.training
         self.model.eval()
         accs = []

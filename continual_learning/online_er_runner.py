@@ -147,7 +147,8 @@ class OnlineERRunner(object):
         print("self.results_task_hossein", self.results_task_hossein)
         print("accs_task_hossein", accs_task_hossein)
         print("np.mean(accs_task_hossein)", np.mean(accs_task_hossein))
-        print("\n", "self.results", self.results)
+        print("\n", "backward_transfer(self.results)", backward_transfer(self.results))
+        print("self.results", self.results)
         return accs
 
     def evaluate_model(self, dataset_name_hossein, eval_loaders, on_cuda=False):

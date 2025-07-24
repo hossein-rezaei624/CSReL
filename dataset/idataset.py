@@ -12,6 +12,131 @@ from PIL import Image
 from dataset.single_task_dataset import MergeDataset, SimpleDataset
 
 
+class SplitMiniImageNet(object):
+    def __init__(self, data_path, batch_size):
+        self.data_path = data_path
+        self.batch_size = batch_size
+        # process data to PIL image, load both train and eval dataset
+        self.train_data = []
+        train_sps = []
+        train_labs = []
+        
+        train_sps = np.load(os.path.join(self.data_path, '%s_x.npy' % ('train')))
+        train_labs = np.load(os.path.join(self.data_path, '%s_y.npy' % ('train')))
+        
+        for i in range(train_sps.shape[0]):
+            np_img = train_sps[i, :]
+            img = Image.fromarray(np_img)
+            lab = int(train_labs[i])
+            self.train_data.append([img, lab])
+        del train_sps
+        del train_labs
+        self.eval_data = []
+        eval_sps = []
+        eval_labs = []
+
+        eval_sps = np.load(os.path.join(self.data_path, '%s_x.npy' % ('test')))
+        eval_labs = np.load(os.path.join(self.data_path, '%s_y.npy' % ('test')))
+        
+        for i in range(eval_sps.shape[0]):
+            np_img = eval_sps[i, :]
+            img = Image.fromarray(np_img)
+            lab = int(eval_labs[i])
+            self.eval_data.append([img, lab])
+
+        # make transforms
+        self.transform_train = torchvision.transforms.Compose(
+            [torchvision.transforms.Resize(32),
+             torchvision.transforms.RandomCrop(32, padding=4),
+             torchvision.transforms.RandomHorizontalFlip(),
+             torchvision.transforms.ToTensor(),
+             torchvision.transforms.Normalize((0.47313006, 0.44905752, 0.40378186), (0.27292014, 0.26559181, 0.27953038))]
+        )
+        self.transform_test = torchvision.transforms.Compose(
+            [torchvision.transforms.Resize(32),
+             torchvision.transforms.ToTensor(),
+             torchvision.transforms.Normalize((0.47313006, 0.44905752, 0.40378186), (0.27292014, 0.26559181, 0.27953038))]
+        )
+        self.to_tensor = torchvision.transforms.ToTensor()
+
+        self.task_dic = {}
+        self.task_dic = self.make_task_dic()
+        self.max_iter = len(self.task_dic)
+        self.cur_iter = 0
+
+        # make data loaders
+        self.train_loaders = []
+        self.slt_loaders = []
+        self.test_loaders = []
+        for i in range(self.max_iter):
+            train_loader, slt_loader, test_loader = self.make_dataset(task_id=i)
+            self.train_loaders.append(train_loader)
+            self.slt_loaders.append(slt_loader)
+            self.test_loaders.append(test_loader)
+
+    def make_dataset(self, task_id):
+        # make both train dataset and test dataset
+        class_set = set(self.task_dic[task_id])
+        task_train_data = []
+        for di in self.train_data:
+            sp, lab = di
+            if lab in class_set:
+                task_train_data.append(di)
+        task_train_dataset = MergeDataset(
+            data=task_train_data,
+            transforms=self.transform_train
+        )
+        train_loader = DataLoader(
+            task_train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=False)
+        task_slt_dataset = SimpleDataset(
+            data=task_train_data,
+            transforms=self.to_tensor
+        )
+        slt_loader = DataLoader(
+            task_slt_dataset, batch_size=len(task_train_data), shuffle=False, drop_last=False)
+        task_test_data = []
+        for di in self.eval_data:
+            sp, lab = di
+            if lab in class_set:
+                task_test_data.append(di)
+        task_test_dataset = SimpleDataset(
+            data=task_test_data,
+            transforms=self.transform_test
+        )
+        test_loader = DataLoader(
+            task_test_dataset, batch_size=100, shuffle=False, drop_last=False)
+        return train_loader, slt_loader, test_loader
+
+    def make_task_dic(self):
+        tasks = 5
+        cls_per_task = 20
+        cur_class = 0
+        for i in range(tasks):
+            self.task_dic[i] = []
+            for j in range(cls_per_task):
+                self.task_dic[i].append(cur_class)
+                cur_class += 1
+        return self.task_dic
+
+    def next_task(self):
+        if self.cur_iter >= self.max_iter:
+            raise Exception('Number of tasks exceeded!')
+        else:
+            self.cur_iter += 1
+            return self.train_loaders[self.cur_iter - 1], self.slt_loaders[self.cur_iter - 1],\
+                self.test_loaders[self.cur_iter - 1]
+
+    def get_transforms(self):
+        return self.transform_train
+
+    def get_task_dic(self):
+        return self.task_dic
+
+    def get_eval_transforms(self):
+        return self.transform_test
+
+
+
 class SplitTinyImageNet(object):
     def __init__(self, data_path, batch_size):
         self.data_path = data_path
@@ -517,7 +642,26 @@ def get_dataset(opts):
     train_loaders = []
     train_sub_loaders_wo_aug = []
     test_loaders = []
-    if opts.dataset == 'splittinyimagenet':
+    if opts.dataset == 'splitminiimagenet':
+        generator = SplitMiniImageNet(
+            data_path=opts.data_path,
+            batch_size=opts.batch_size
+        )
+        transforms = generator.get_transforms()
+        eval_transforms = generator.get_eval_transforms()
+        for i in range(generator.max_iter):
+            task_train_loader, task_slt_loader, task_test_loader = generator.next_task()
+            train_loaders.append(task_train_loader)
+            test_loaders.append(task_test_loader)
+        model_params = {
+            'model_type': 'resnet',
+            'num_class': 100,
+            'num_blocks': [2, 2, 2, 2],
+            'use_bn': bool(opts.use_bn),
+            'setting': opts.setting
+        }
+        task_dic = generator.get_task_dic()    
+    elif opts.dataset == 'splittinyimagenet':
         generator = SplitTinyImageNet(
             data_path=opts.data_path,
             batch_size=opts.batch_size

@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/stream_tiny_imagenet/test2'  # set your output path
+local_path='./results/stream_tiny_imagenet/test1'  # set your output path
 dataset='splittinyimagenet'
 data_path='./tiny_imagenet_from_DER'  # need to download tiny-imagenet dataset
 buffer_size=500

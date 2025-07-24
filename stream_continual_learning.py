@@ -75,12 +75,12 @@ def main(opts):
         )
     else:
         scheduler_params = None
-        if opts.dataset == 'splitcifar100':
-            scheduler_params = {
-                'type': 'multisteplr',
-                'milestones': [35, 45],
-                'gamma': 0.1
-            }
+        ##if opts.dataset == 'splitcifar100':
+        ##    scheduler_params = {
+        ##        'type': 'multisteplr',
+        ##        'milestones': [35, 45],
+        ##        'gamma': 0.1
+        ##    }
         runner = online_er_runner.OnlineERRunner(
             local_path=opts.local_path,
             buffer_size=opts.buffer_size,

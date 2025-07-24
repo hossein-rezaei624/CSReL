@@ -1,5 +1,5 @@
 # -*-coding:utf8-*-
-
+#start adding split miniimagenet
 import os
 import numpy as np
 import torchvision.transforms

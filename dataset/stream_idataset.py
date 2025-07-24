@@ -38,7 +38,36 @@ def get_data_loaders(dataset, data_path, batch_size, use_bn):
     train_loaders = []
     test_loaders = []
     to_pil = torchvision.transforms.ToPILImage()
-    if dataset == 'splittinyimagenet':
+    if dataset == 'splitminiimagenet':
+        generator = idataset.SplitMiniImageNet(
+            data_path=data_path, batch_size=batch_size)
+        transforms = generator.get_transforms()
+        id_bias = 0
+        for i in range(generator.max_iter):
+            _, task_slt_loader, task_test_loader = generator.next_task()
+            train_data = []
+            for di in task_slt_loader.dataset:
+                sp, lab = di
+                pil_sp = to_pil(sp)
+                train_data.append([pil_sp, lab])
+            task_train_dataset = IDMergeDataset(
+                data=train_data,
+                transforms=transforms,
+                id_bias=id_bias
+            )
+            task_train_loader = DataLoader(
+                task_train_dataset, batch_size=batch_size, shuffle=True, drop_last=False)
+            id_bias += len(train_data)
+            train_loaders.append(task_train_loader)
+            test_loaders.append(task_test_loader)
+        model_params = {
+            'model_type': 'resnet',
+            'num_class': 100,
+            'num_blocks': [2, 2, 2, 2],
+            'use_bn': use_bn,
+            'setting': 'der'
+        }
+    elif dataset == 'splittinyimagenet':
         generator = idataset.SplitTinyImageNet(
             data_path=data_path, batch_size=batch_size)
         transforms = generator.get_transforms()

@@ -56,13 +56,15 @@ class SplitTinyImageNet(object):
 
         # make transforms
         self.transform_train = torchvision.transforms.Compose(
-            [torchvision.transforms.RandomCrop(64, padding=4),
+            [torchvision.transforms.Resize(32),
+             torchvision.transforms.RandomCrop(32, padding=4),
              torchvision.transforms.RandomHorizontalFlip(),
              torchvision.transforms.ToTensor(),
              torchvision.transforms.Normalize((0.4802, 0.4480, 0.3975), (0.2770, 0.2691, 0.2821))]
         )
         self.transform_test = torchvision.transforms.Compose(
-            [torchvision.transforms.ToTensor(),
+            [torchvision.transforms.Resize(32),
+             torchvision.transforms.ToTensor(),
              torchvision.transforms.Normalize((0.4802, 0.4480, 0.3975), (0.2770, 0.2691, 0.2821))]
         )
         self.to_tensor = torchvision.transforms.ToTensor()

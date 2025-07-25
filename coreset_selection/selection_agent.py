@@ -327,7 +327,7 @@ class RhoSelectionAgent(object):
             )
             trained_model = result
             init_model = trained_model
-            print('finish selecting samples:', len(all_selected_ids))
+            ##print('finish selecting samples:', len(all_selected_ids))
         if len(full_data_file) > 0:
             os.remove(full_data_file)
         # get selected data

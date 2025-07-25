@@ -1,9 +1,9 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/stream_mini_imagenet/test10'  # set your output path
+local_path='./results/stream_mini_imagenet/test11'  # set your output path
 dataset='splitminiimagenet'
 data_path='./mini_imagenet_from_DER'  # need to download tiny-imagenet dataset
-buffer_size=1000
+buffer_size=2000
 alpha=1.0
 beta=0.0
 lr=3e-2
@@ -20,7 +20,7 @@ cur_train_lr=5e-3
 cur_train_steps=20
 selection_steps=250
 setting=''
-seed=4
+seed=0
 
 
 python3 -u stream_continual_learning.py --local_path=$local_path \

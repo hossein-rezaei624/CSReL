@@ -19,7 +19,7 @@ remove_mode='random'
 cur_train_lr=5e-3
 cur_train_steps=20
 selection_steps=250
-setting=''
+setting='er'
 seed=0
 
 

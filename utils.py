@@ -134,12 +134,10 @@ def build_model(model_params):
         )
     elif model_params['model_type'] == 'resnet':
         if 'setting' in model_params and model_params['setting'] == 'der':
-            print("derrrrrrrrrrrrrrrrrrrrrrrrrrr")
             model = models.resnet18_der(nclasses=model_params['num_class'], nf=64)
         elif 'setting' in model_params and model_params['setting'] == 'large_model':
             model = resnets.resnet50(num_class=model_params['num_class'])
         else:
-            print("nooooooooooooooooooooooooooooooooooo")
             if model_params['use_bn']:
                 model = models.ResNet(
                     block=models.BasicBlockBN,

@@ -120,11 +120,11 @@ class ContinualRunner(object):
                                 kd_loss = 0
                                 total_kd_loss.append(0)
                             loss = loss + alpha * pre_loss + beta * kd_loss
-                        if verbose and step % 100 == 0:
-                            print('loss at step ', step, 'is:', loss.item())
-                            print('previous loss at step ', step, 'is:', np.mean(total_pre_loss), len(total_pre_loss))
-                            if kd_loss_fn is not None:
-                                print('kd loss is:', np.mean(total_kd_loss), len(total_kd_loss))
+                        ##if verbose and step % 100 == 0:
+                        ##    print('loss at step ', step, 'is:', loss.item())
+                        ##    print('previous loss at step ', step, 'is:', np.mean(total_pre_loss), len(total_pre_loss))
+                        ##    if kd_loss_fn is not None:
+                        ##        print('kd loss is:', np.mean(total_kd_loss), len(total_kd_loss))
                     else:
                         buffer_data = self.buffer.get_sub_data(size=self.train_params['mem_batch_size'])
                         if len(buffer_data) == 3:
@@ -144,31 +144,31 @@ class ContinualRunner(object):
                         else:
                             kd_loss = 0
                         loss = loss + alpha * pre_loss + beta * kd_loss
-                        if verbose and step % 100 == 0:
-                            print('loss at step ', step, 'is:', loss.item())
-                            print('previous loss at step ', step, 'is:', pre_loss.item())
-                            if kd_loss_fn is not None:
-                                print('kd loss is:', kd_loss.item())
+                        ##if verbose and step % 100 == 0:
+                        ##    print('loss at step ', step, 'is:', loss.item())
+                        ##    print('previous loss at step ', step, 'is:', pre_loss.item())
+                        ##    if kd_loss_fn is not None:
+                        ##        print('kd loss is:', kd_loss.item())
                 else:
                     out_logits = self.model(aug_sp)
                     loss = loss_fn(out_logits, lab)
-                    if verbose and step % 100 == 0:
-                        print('loss at step ', step, 'is:', loss.item())
+                    ##if verbose and step % 100 == 0:
+                    ##    print('loss at step ', step, 'is:', loss.item())
                 opt.zero_grad()
                 loss.backward()
                 opt.step()
                 step += 1
-            print('finish training epoch:', i)
+            ##print('finish training epoch:', i)
             if do_evaluation and i % 10 == 0:
                 accs, losses = self.evaluate_model(eval_loaders=eval_loaders, on_cuda=self.use_cuda)
-                print('\taccuracy on test is:', np.mean(accs), accs, losses)
-                if len(accs) > 1:
-                    print('\tprevious tasks accuracy is:', np.mean(accs[:-1]))
+                ##print('\taccuracy on test is:', np.mean(accs), accs, losses)
+                ##if len(accs) > 1:
+                ##    print('\tprevious tasks accuracy is:', np.mean(accs[:-1]))
         if self.train_params['use_cuda']:
             self.model.cpu()
         del alpha
         accs, losses = self.evaluate_model(eval_loaders=eval_loaders, on_cuda=False)
-        print('\tlosses on testset is:', losses)
+        ##print('\tlosses on testset is:', losses)
         self.results.append(accs)
         return accs
 

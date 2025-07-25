@@ -80,7 +80,7 @@ class CoresetBuffer(object):
             new_id2logit = None
         # re-select previous tasks
         for i in range(task_id):
-            print('\tselect coreset for task', i, task_sizes[i])
+            ##print('\tselect coreset for task', i, task_sizes[i])
             # get data
             id_pool = []
             prv_x = []
@@ -142,7 +142,7 @@ class CoresetBuffer(object):
         # select current task data
         cur_select_size = self.buffer_size - pre_select_size
         # train current ref model
-        print('\ttrain ref model for task', task_id, cur_select_size)
+        ##print('\ttrain ref model for task', task_id, cur_select_size)
         if 'ref_sample_per_task' in self.selection_params['ref_train_params'] and \
                 self.selection_params['ref_train_params']['ref_sample_per_task'] > 0:
             extra_data = self.make_extra_ref_samples(
@@ -158,7 +158,7 @@ class CoresetBuffer(object):
         )
         loss_dic_dump_file = os.path.join(self.local_path, 'ref_loss_dic' + str(task_id) + '.pkl')
         # coreset selection
-        print('\tselect coreset for task', task_id)
+        ##print('\tselect coreset for task', task_id)
         extra_data = self.make_extra_data(
             cur_x=cur_x,
             cur_y=cur_y,

@@ -7,7 +7,7 @@ buffer_size=500
 alpha=1.0
 beta=0.0
 lr=3e-2
-epochs=2
+epochs=50
 batch_size=32
 mem_batch_size=32
 use_cuda=1
@@ -19,7 +19,7 @@ remove_mode='random'
 cur_train_lr=5e-3
 cur_train_steps=20
 selection_steps=250
-setting='er'
+setting=''
 seed=0
 
 

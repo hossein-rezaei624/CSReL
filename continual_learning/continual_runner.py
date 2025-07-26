@@ -243,7 +243,7 @@ class ContinualRunner(object):
         ___, x, y = next(iter(full_train_loader))
         full_cur_x = x.numpy()
         full_cur_y = y.numpy()
-        cur_x, cur_y = next(iter(sub_loader))
+        ___, cur_x, cur_y = next(iter(sub_loader))
         self.task_cnts.append(cur_x.shape[0])
         if 'beta' in self.train_params:
             temp_data = []

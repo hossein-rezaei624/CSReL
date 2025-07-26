@@ -117,7 +117,7 @@ class ContinualRunner(object):
         for i in range(self.train_params['epochs']):
             step = 0
             for data in train_loader:
-                aug_sp, ___, lab = data
+                aug_sp, lab, ___ = data
                 if self.use_cuda:
                     aug_sp = aug_sp.cuda()
                     lab = lab.cuda()

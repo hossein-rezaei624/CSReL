@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/split_tiny_imagenet/test3'  # set your output path
+local_path='./results/split_tiny_imagenet/test4'  # set your output path
 dataset='splittinyimagenet'
 setting='der'
 data_path='./tiny_imagenet_from_DER'
@@ -18,12 +18,12 @@ slt_wo_aug=0
 holdout_set='sub'
 replay_mode='sub'
 use_bn=1
-limit_per_task=5000
+limit_per_task=10000
 runner_type='coreset'
 update_mode='coreset'
 extra_data=''
 ref_train_epoch=10
-selection_steps=40
+selection_steps=100
 cur_train_steps=7
 buffer_type='coreset'
 aug_type='der'

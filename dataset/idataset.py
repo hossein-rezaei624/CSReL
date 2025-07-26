@@ -66,11 +66,13 @@ class SplitMiniImageNet(object):
 
         # make data loaders
         self.train_loaders = []
+        self.train_loaders_hossein = []
         self.slt_loaders = []
         self.test_loaders = []
         for i in range(self.max_iter):
-            train_loader, slt_loader, test_loader = self.make_dataset(task_id=i)
+            train_loader, slt_loader, test_loader, train_loader_hossein = self.make_dataset(task_id=i)
             self.train_loaders.append(train_loader)
+            self.train_loaders_hossein.append(train_loader_hossein)
             self.slt_loaders.append(slt_loader)
             self.test_loaders.append(test_loader)
 
@@ -86,8 +88,14 @@ class SplitMiniImageNet(object):
             data=task_train_data,
             transforms=self.transform_train
         )
+        task_train_dataset_hossein = MergeDataset(
+            data=task_train_data,
+            transforms=self.to_tensor
+        )
         train_loader = DataLoader(
             task_train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=False)
+        train_loader_hossein = DataLoader(
+            task_train_dataset_hossein, batch_size=self.batch_size, shuffle=False, drop_last=False)
         task_slt_dataset = SimpleDataset(
             data=task_train_data,
             transforms=self.to_tensor
@@ -105,7 +113,7 @@ class SplitMiniImageNet(object):
         )
         test_loader = DataLoader(
             task_test_dataset, batch_size=100, shuffle=False, drop_last=False)
-        return train_loader, slt_loader, test_loader
+        return train_loader, slt_loader, test_loader, train_loader_hossein
 
     def make_task_dic(self):
         tasks = 5
@@ -669,9 +677,10 @@ def get_dataset(opts):
         transforms = generator.get_transforms()
         eval_transforms = generator.get_eval_transforms()
         for i in range(generator.max_iter):
-            task_train_loader, task_slt_loader, task_test_loader = generator.next_task()
+            task_train_loader, task_slt_loader, task_test_loader, task_train_loader_hossein = generator.next_task()
             train_loaders.append(task_train_loader)
             test_loaders.append(task_test_loader)
+            train_sub_loaders_wo_aug.append(task_train_loader_hossein)
         model_params = {
             'model_type': 'resnet',
             'num_class': 200,

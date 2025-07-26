@@ -90,7 +90,7 @@ def main(opts):
     # continual training and update memory
     for i in range(len(task_dic)):
         if opts.runner_type == 'coreset':
-            accs = runner.train_single_task(
+            accs = runner.train_single_task(opts.dataset,
                 train_loader=train_loaders[i],
                 eval_loaders=test_loaders,
                 verbose=True,
@@ -98,7 +98,7 @@ def main(opts):
             )
         else:
             raise ValueError('Invalid runner type')
-        print('accuracies on testset after task', i, 'is:', accs, np.mean(accs))
+        ##print('accuracies on testset after task', i, 'is:', accs, np.mean(accs))
         if opts.runner_type == 'coreset':
             runner.update_buffer(
                 full_train_loader=train_sub_loaders_wo_aug[i],

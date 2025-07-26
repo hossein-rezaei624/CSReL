@@ -668,21 +668,10 @@ def get_dataset(opts):
         )
         transforms = generator.get_transforms()
         eval_transforms = generator.get_eval_transforms()
-
         for i in range(generator.max_iter):
-            train_inds, full_train_inds, test_inds = generator.next_task()
-            train_sub_loaders_wo_aug.append(
-                get_custom_loader(
-                    generator.train_dataset_wo_augment, train_inds, batch_size=len(train_inds), shuffle=False)
-            )
-            test_loaders.append(get_custom_loader(generator.test_dataset, test_inds, batch_size=opts.batch_size))
-            if opts.runner_type == 'coreset':
-                train_loaders.append(
-                    get_custom_loader(generator.train_dataset, train_inds, batch_size=opts.batch_size)
-                )
-            else:
-                raise ValueError('Invalid runner type')
-        
+            task_train_loader, task_slt_loader, task_test_loader = generator.next_task()
+            train_loaders.append(task_train_loader)
+            test_loaders.append(task_test_loader)
         model_params = {
             'model_type': 'resnet',
             'num_class': 200,

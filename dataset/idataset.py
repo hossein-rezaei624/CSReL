@@ -238,7 +238,7 @@ class SplitTinyImageNet(object):
         train_loader = DataLoader(
             task_train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=False)
         train_loader_hossein = DataLoader(
-            task_train_dataset_hossein, batch_size=self.batch_size, shuffle=False, drop_last=False)
+            task_train_dataset_hossein, batch_size=len(task_train_data), shuffle=False, drop_last=False)
         task_slt_dataset = SimpleDataset(
             data=task_train_data,
             transforms=self.to_tensor

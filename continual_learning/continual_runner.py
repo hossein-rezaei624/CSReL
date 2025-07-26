@@ -240,7 +240,7 @@ class ContinualRunner(object):
 
     def update_buffer(self, full_train_loader, sub_loader, next_loader=None):
         # make current x and y
-        x, y = next(iter(full_train_loader))
+        ___, x, y = next(iter(full_train_loader))
         full_cur_x = x.numpy()
         full_cur_y = y.numpy()
         cur_x, cur_y = next(iter(sub_loader))

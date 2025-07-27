@@ -62,4 +62,3 @@ python3 -u offline_continual_learning.py --local_path=$local_path \
 	--buffer_type=$buffer_type \
 	--ref_sample_per_task=$ref_sample_per_task \
 	--aug_type=$aug_type
-

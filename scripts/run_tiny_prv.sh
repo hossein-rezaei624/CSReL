@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/split_tiny_imagenet/test54'  # set your output path
+local_path='./results/split_tiny_imagenet/test55'  # set your output path
 dataset='splittinyimagenet'
 setting='der'
 data_path='./tiny_imagenet_from_DER'
@@ -22,14 +22,14 @@ limit_per_task=5000
 runner_type='coreset'
 update_mode='coreset'
 extra_data=''
-ref_train_epoch=10
+ref_train_epoch=5
 selection_steps=40
 cur_train_steps=7
 buffer_type='coreset'
 aug_type='der'
 ref_train_lr=3e-3
 cur_train_lr=5e-3
-ref_sample_per_task=400
+ref_sample_per_task=200
 
 
 python3 -u offline_continual_learning.py --local_path=$local_path \

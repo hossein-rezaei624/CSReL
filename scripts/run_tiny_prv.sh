@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/split_tiny_imagenet/test5'  # set your output path
+local_path='./results/split_tiny_imagenet/test6'  # set your output path
 dataset='splittinyimagenet'
 setting='der'
 data_path='./tiny_imagenet_from_DER'
@@ -23,8 +23,8 @@ runner_type='coreset'
 update_mode='coreset'
 extra_data=''
 ref_train_epoch=20
-selection_steps=250
-cur_train_steps=7
+selection_steps=100
+cur_train_steps=20
 buffer_type='coreset'
 aug_type='der'
 ref_train_lr=3e-3

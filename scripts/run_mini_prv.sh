@@ -1,10 +1,10 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/split_mini_imagenet/test14'  # set your output path
+local_path='./results/split_mini_imagenet/test1'  # set your output path
 dataset='splitminiimagenet'
 setting='der'
 data_path='./mini_imagenet_from_DER'
-buffer_size=2000
+buffer_size=500
 alpha=4.0
 beta=0.0
 lr=2e-2
@@ -13,7 +13,7 @@ batch_size=32
 mem_batch_size=32
 use_cuda=1
 opt_type='sgd'
-seed=4
+seed=1
 slt_wo_aug=0
 holdout_set='sub'
 replay_mode='sub'

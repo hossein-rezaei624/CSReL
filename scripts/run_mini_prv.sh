@@ -1,10 +1,10 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/split_mini_imagenet/test0'  # set your output path
+local_path='./results/split_mini_imagenet/test10'  # set your output path
 dataset='splitminiimagenet'
 setting='der'
 data_path='./mini_imagenet_from_DER'
-buffer_size=500
+buffer_size=2000
 alpha=4.0
 beta=0.0
 lr=2e-2

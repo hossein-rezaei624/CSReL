@@ -95,7 +95,7 @@ class SplitMiniImageNet(object):
         train_loader = DataLoader(
             task_train_dataset, batch_size=self.batch_size, shuffle=True, drop_last=False)
         train_loader_hossein = DataLoader(
-            task_train_dataset_hossein, batch_size=self.batch_size, shuffle=False, drop_last=False)
+            task_train_dataset_hossein, batch_size=len(task_train_data), shuffle=False, drop_last=False)
         task_slt_dataset = SimpleDataset(
             data=task_train_data,
             transforms=self.to_tensor
@@ -132,7 +132,7 @@ class SplitMiniImageNet(object):
         else:
             self.cur_iter += 1
             return self.train_loaders[self.cur_iter - 1], self.slt_loaders[self.cur_iter - 1],\
-                self.test_loaders[self.cur_iter - 1]
+                self.test_loaders[self.cur_iter - 1], self.train_loaders_hossein[self.cur_iter - 1]
 
     def get_transforms(self):
         return self.transform_train
@@ -666,9 +666,10 @@ def get_dataset(opts):
         transforms = generator.get_transforms()
         eval_transforms = generator.get_eval_transforms()
         for i in range(generator.max_iter):
-            task_train_loader, task_slt_loader, task_test_loader = generator.next_task()
+            task_train_loader, task_slt_loader, task_test_loader, task_train_loader_hossein = generator.next_task()
             train_loaders.append(task_train_loader)
             test_loaders.append(task_test_loader)
+            train_sub_loaders_wo_aug.append(task_train_loader_hossein)
         model_params = {
             'model_type': 'resnet',
             'num_class': 100,

@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/stream_cifar100/test15'  # set your output path
+local_path='./results/stream_cifar100/test60'  # set your output path
 dataset='splitcifar100'
 data_path=''  # default: ../data
 buffer_size=2000
@@ -21,7 +21,7 @@ cur_train_lr=5e-3
 cur_train_steps=20
 selection_steps=100
 setting=''
-seed=4
+seed=0
 
 
 python3 -u stream_continual_learning.py --local_path=$local_path \

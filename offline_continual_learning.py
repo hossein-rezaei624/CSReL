@@ -9,7 +9,6 @@ from continual_learning import continual_runner
 from dataset import idataset
 
 from datetime import datetime
-import time
 
 
 def make_selection_params(opts):
@@ -48,10 +47,6 @@ def make_selection_params(opts):
 def main(opts):
 
     start_hossein = datetime.now()
-    print("time started atttttttttt111:", start_hossein)
-    start_time_hossein = time.time()
-    print("time started atttttttttt222:", start_time_hossein)
-
     
     if not os.path.exists(opts.local_path):
         os.makedirs(opts.local_path)
@@ -121,11 +116,7 @@ def main(opts):
 
 
     end_hossein = datetime.now()
-    print("time ended attttttttttttt111:", end_hossein)
-    end_time_hossein = time.time()
-    print("time ended attttttttttttt222:", end_time_hossein)
     print(f"Elapsed time: {end_hossein - start_hossein}")
-    print(f"Elapsed time: {end_time_hossein - start_time_hossein} seconds")
 
 
 if __name__ == '__main__':

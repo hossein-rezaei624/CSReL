@@ -117,7 +117,7 @@ class ContinualRunner(object):
         for i in range(self.train_params['epochs']):
             step = 0
             for data in train_loader:
-                ___, aug_sp, lab = data
+                aug_sp, lab = data
                 if self.use_cuda:
                     aug_sp = aug_sp.cuda()
                     lab = lab.cuda()
@@ -199,7 +199,7 @@ class ContinualRunner(object):
         self.results.append(accs)
         self.results_task_hossein.append(accs_task_hossein)
         print("\nTask", self.seen_tasks + 1, ":  Class ACC:", np.mean(accs), "     Task ACC:", np.mean(accs_task_hossein), "\n")
-        if self.seen_tasks > 3:
+        if self.seen_tasks > 8:
             print("Class BWT:", backward_transfer(self.results), "     Task BWT:", backward_transfer(self.results_task_hossein), "\n")
             print("fullclasss", self.results, "\n")
             print("fulltask", self.results_task_hossein)
@@ -240,10 +240,10 @@ class ContinualRunner(object):
 
     def update_buffer(self, full_train_loader, sub_loader, next_loader=None):
         # make current x and y
-        ___, x, y = next(iter(full_train_loader))
+        x, y = next(iter(full_train_loader))
         full_cur_x = x.numpy()
         full_cur_y = y.numpy()
-        ___, cur_x, cur_y = next(iter(sub_loader))
+        cur_x, cur_y = next(iter(sub_loader))
         self.task_cnts.append(cur_x.shape[0])
         if 'beta' in self.train_params:
             temp_data = []

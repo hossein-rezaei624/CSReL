@@ -9,8 +9,12 @@ from continual_learning import online_rho_runner
 from continual_learning import online_er_runner
 from dataset import stream_idataset
 
+from datetime import datetime
 
 def main(opts):
+
+    start_hossein = datetime.now()
+    
     if not os.path.exists(opts.local_path):
         os.makedirs(opts.local_path)
     # make data loaders
@@ -104,6 +108,8 @@ def main(opts):
         ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
         runner.next_task(dump_buffer=True)
 
+    end_hossein = datetime.now()
+    print(f"Elapsed time: {end_hossein - start_hossein}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('rho stream continual learning')

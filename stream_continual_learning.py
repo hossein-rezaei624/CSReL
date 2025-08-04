@@ -10,7 +10,6 @@ from continual_learning import online_er_runner
 from dataset import stream_idataset
 
 from datetime import datetime
-import torch
 
 
 def main(opts):
@@ -122,22 +121,20 @@ def main(opts):
         for kk in range (len(runner.buffer.data)):
             temp_jjj.append(runner.buffer.data[kk][2])
         print("runner.buffer.data", temp_jjj)
-        new_tem11_ = torch.stack(temp_jjj)
-        print("runner.buffer.data", new_tem11_)
 
+        confidence_by_task_ = {task_id:0 for task_id in range(10)}
+        confidence_by_class_ = {class_id:0 for class_id in range(100)}
+        for j in range(1000):
+            confidence_by_task_[task_class_[temp_jjj[j]]] += 1
+            confidence_by_class_[temp_jjj[j]] += 1
+            
+        print("confidence_by_task_", confidence_by_task_)
+        print("confidence_by_class_", confidence_by_class_)
         
         ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
         runner.next_task(dump_buffer=True)
 
 
-    confidence_by_task_ = {task_id:0 for task_id in range(10)}
-    confidence_by_class_ = {class_id:0 for class_id in range(100)}
-    for j in range(1000):
-        confidence_by_task_[task_class_[model.buffer.labels[j].item()]] += 1
-        confidence_by_class_[model.buffer.labels[j].item()] += 1
-        
-    print("confidence_by_task_", confidence_by_task_)
-    print("confidence_by_class_", confidence_by_class_)
 
     
     end_hossein = datetime.now()
@@ -195,6 +192,7 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+
 
 
 

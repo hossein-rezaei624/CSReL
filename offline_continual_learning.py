@@ -122,6 +122,7 @@ def main(opts):
                 break
         
         task_class_.update({value: i for index, value in enumerate(unique_classes_)})
+        print("task_class_", task_class_)
 
         
         runner.next_task(dump_buffer=True)
@@ -218,4 +219,5 @@ if __name__ == '__main__':
     print('ref sample per task\t\t', args.ref_sample_per_task)
     print('seed\t\t', args.seed)
     main(opts=args)
+
 

@@ -116,7 +116,8 @@ def main(opts):
         
         task_class_.update({value: i for index, value in enumerate(unique_classes_)})
         print("task_class_", task_class_)
-        print("buffer data", runner.buffer.data)
+        print("runner.buffer.data[0]", runner.buffer.data[0])
+        print("len of buffer data", len(runner.buffer.data))
 
         
         ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
@@ -188,5 +189,6 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+
 
 

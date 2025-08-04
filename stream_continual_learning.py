@@ -116,6 +116,7 @@ def main(opts):
         
         task_class_.update({value: i for index, value in enumerate(unique_classes_)})
         print("task_class_", task_class_)
+        print("buffer data", runner.buffer.data)
 
         
         ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
@@ -124,7 +125,7 @@ def main(opts):
 
     confidence_by_task_ = {task_id:0 for task_id in range(10)}
     confidence_by_class_ = {class_id:0 for class_id in range(100)}
-    for j in range(model.args.buffer_size):
+    for j in range(1000):
         confidence_by_task_[task_class_[model.buffer.labels[j].item()]] += 1
         confidence_by_class_[model.buffer.labels[j].item()] += 1
         
@@ -187,4 +188,5 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+
 

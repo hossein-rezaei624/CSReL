@@ -125,10 +125,10 @@ def main(opts):
         print("task_class_", task_class_)
     
         temp_jjj = []
-        print("runner.buffer.data[0]", runner.buffer.data[0][0])
-        print("len(runner.buffer.data)", len(runner.buffer.data), len(runner.buffer.data[0]), len(runner.buffer.data[0][0]))
-        for kk in range (len(runner.buffer.data)):
-            temp_jjj.append(runner.buffer.data[kk][2])
+        for kk in range (1000):
+            temp_jjj.append(runner.buffer.data[0][kk][2])
+
+        print("temp_jjj", temp_jjj)
     
         confidence_by_task_ = {task_id:0 for task_id in range(10)}
         confidence_by_class_ = {class_id:0 for class_id in range(100)}
@@ -219,6 +219,7 @@ if __name__ == '__main__':
     print('ref sample per task\t\t', args.ref_sample_per_task)
     print('seed\t\t', args.seed)
     main(opts=args)
+
 
 
 

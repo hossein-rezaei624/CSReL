@@ -118,7 +118,7 @@ def main(opts):
         
         task_class_.update({value: i for index, value in enumerate(unique_classes_)})
         print("task_class_", task_class_)
-        temp_new = torch.stack(runner.buffer.data, dim=0)
+        temp_new = torch.stack(runner.buffer.data)
         print("temp_new.shape", temp_new.shape)
         print("temp_new[2,:]", temp_new[2,:])
         print("runner.buffer.data[0]", runner.buffer.data[0])
@@ -194,6 +194,7 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+
 
 
 

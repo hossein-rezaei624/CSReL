@@ -116,26 +116,23 @@ def main(opts):
                 break
         
         task_class_.update({value: i for index, value in enumerate(unique_classes_)})
-        print("task_class_", task_class_)
-        temp_jjj = []
-        for kk in range (len(runner.buffer.data)):
-            temp_jjj.append(runner.buffer.data[kk][2])
-        print("runner.buffer.data", temp_jjj)
-
-        confidence_by_task_ = {task_id:0 for task_id in range(10)}
-        confidence_by_class_ = {class_id:0 for class_id in range(100)}
-        for j in range(1000):
-            confidence_by_task_[task_class_[temp_jjj[j]]] += 1
-            confidence_by_class_[temp_jjj[j]] += 1
-            
-        print("confidence_by_task_", confidence_by_task_)
-        print("confidence_by_class_", confidence_by_class_)
         
         ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
         runner.next_task(dump_buffer=True)
 
 
+    temp_jjj = []
+    for kk in range (len(runner.buffer.data)):
+        temp_jjj.append(runner.buffer.data[kk][2])
 
+    confidence_by_task_ = {task_id:0 for task_id in range(10)}
+    confidence_by_class_ = {class_id:0 for class_id in range(100)}
+    for j in range(1000):
+        confidence_by_task_[task_class_[temp_jjj[j]]] += 1
+        confidence_by_class_[temp_jjj[j]] += 1
+        
+    print("confidence_by_task_", confidence_by_task_)
+    print("confidence_by_class_", confidence_by_class_)
     
     end_hossein = datetime.now()
     print(f"Elapsed time: {end_hossein - start_hossein}")
@@ -192,6 +189,7 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+
 
 
 

@@ -93,6 +93,7 @@ def main(opts):
     else:
         raise ValueError('Invalid runner type')
     # continual training and update memory
+    task_class_ = {}
     for i in range(len(task_dic)):
         if opts.runner_type == 'coreset':
             accs = runner.train_single_task(opts.dataset,
@@ -112,8 +113,35 @@ def main(opts):
             )
         else:
             raise ValueError('Invalid runner type')
+
+
+        unique_classes_ = set()
+        for ______, labels_ in train_loaders[i]:
+            unique_classes_.update(labels_.numpy())
+            if len(unique_classes_)==10:
+                break
+        
+        task_class_.update({value: i for index, value in enumerate(unique_classes_)})
+
+        
         runner.next_task(dump_buffer=True)
 
+
+    temp_jjj = []
+    print("len(runner.buffer.data)", len(runner.buffer.data))
+    print("runner.buffer.data[0]", runner.buffer.data[0])
+    for kk in range (len(runner.buffer.data)):
+        temp_jjj.append(runner.buffer.data[kk][2])
+
+    confidence_by_task_ = {task_id:0 for task_id in range(10)}
+    confidence_by_class_ = {class_id:0 for class_id in range(100)}
+    for j in range(1000):
+        confidence_by_task_[task_class_[temp_jjj[j]]] += 1
+        confidence_by_class_[temp_jjj[j]] += 1
+        
+    print("confidence_by_task_", confidence_by_task_)
+    print("confidence_by_class_", confidence_by_class_)
+    
 
     end_hossein = datetime.now()
     print(f"Elapsed time: {end_hossein - start_hossein}")
@@ -190,3 +218,4 @@ if __name__ == '__main__':
     print('ref sample per task\t\t', args.ref_sample_per_task)
     print('seed\t\t', args.seed)
     main(opts=args)
+

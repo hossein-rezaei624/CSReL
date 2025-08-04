@@ -98,6 +98,7 @@ def main(opts):
             scheduler_params=scheduler_params,
             seed=opts.seed
         )
+    task_class_ = {}
     for i in range(len(train_loaders)):
         accs = runner.train_single_task(opts.dataset, 
             train_loader=train_loaders[i],
@@ -105,9 +106,32 @@ def main(opts):
             verbose=True,
             do_evaluation=True
         )
+
+
+        unique_classes_ = set()
+        for ___, _____, ______, labels_ in train_loaders[i]:
+            unique_classes_.update(labels_.numpy())
+            if len(unique_classes_)==10:
+                break
+        
+        task_class_.update({value: i for index, value in enumerate(unique_classes_)})
+        print("task_class_", task_class_)
+
+        
         ##print('accuracies on task', i, 'is:', accs, np.mean(accs))
         runner.next_task(dump_buffer=True)
 
+
+    confidence_by_task_ = {task_id:0 for task_id in range(10)}
+    confidence_by_class_ = {class_id:0 for class_id in range(100)}
+    for j in range(model.args.buffer_size):
+        confidence_by_task_[task_class_[model.buffer.labels[j].item()]] += 1
+        confidence_by_class_[model.buffer.labels[j].item()] += 1
+        
+    print("confidence_by_task_", confidence_by_task_)
+    print("confidence_by_class_", confidence_by_class_)
+
+    
     end_hossein = datetime.now()
     print(f"Elapsed time: {end_hossein - start_hossein}")
 
@@ -163,3 +187,4 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+

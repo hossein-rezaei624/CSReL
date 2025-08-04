@@ -144,7 +144,7 @@ class OnlineERRunner(object):
         self.results.append(accs)
         self.results_task_hossein.append(accs_task_hossein)
         print("Task", self.seen_tasks + 1, ":  Class ACC:", np.mean(accs), "     Task ACC:", np.mean(accs_task_hossein), "\n")
-        if self.seen_tasks > 3:
+        if self.seen_tasks > 8:
             print("Class BWT:", backward_transfer(self.results), "     Task BWT:", backward_transfer(self.results_task_hossein), "\n")
             print("fullclasss", self.results, "\n")
             print("fulltask", self.results_task_hossein)
@@ -191,3 +191,4 @@ class OnlineERRunner(object):
         if dump_buffer:
             self.buffer.dump_buffer(task_id=self.seen_tasks)
         self.seen_tasks += 1
+

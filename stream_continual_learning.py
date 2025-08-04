@@ -10,6 +10,8 @@ from continual_learning import online_er_runner
 from dataset import stream_idataset
 
 from datetime import datetime
+import torch
+
 
 def main(opts):
 
@@ -192,6 +194,7 @@ if __name__ == '__main__':
     print('seed\t\t', args.seed)
     print('\n')
     main(opts=args)
+
 
 
 

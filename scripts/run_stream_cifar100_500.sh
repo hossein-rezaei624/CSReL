@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/stream_cifar100/test1'  # set your output path
+local_path='./results/stream_cifar100/test2'  # set your output path
 dataset='splitcifar100'
 data_path=''  # default: ../data
 buffer_size=1000
@@ -15,7 +15,7 @@ opt_type='sgd'
 use_bn=1
 ce_factor=1.0
 mse_factor=0.0
-update_mode='rho_loss'
+update_mode='random'
 remove_mode='random'
 cur_train_lr=5e-3
 cur_train_steps=20

@@ -126,19 +126,21 @@ def main(opts):
     
         temp_jjj = []
         print("lennnn", len(runner.buffer.data), len(runner.buffer.data[0]), len(runner.buffer.data[0][0]))
-        for kk in range (1000):
-            temp_jjj.append(runner.buffer.data[i][kk][2])
+        if i > 0:
+            print("lennnn", len(runner.buffer.data), len(runner.buffer.data[i]), len(runner.buffer.data[0][0]))
+        ##for kk in range (1000):
+        ##    temp_jjj.append(runner.buffer.data[i][kk][2])
 
-        print("temp_jjj", temp_jjj)
+        ##print("temp_jjj", temp_jjj)
     
-        confidence_by_task_ = {task_id:0 for task_id in range(10)}
-        confidence_by_class_ = {class_id:0 for class_id in range(100)}
-        for j in range(1000):
-            confidence_by_task_[task_class_[temp_jjj[j]]] += 1
-            confidence_by_class_[temp_jjj[j]] += 1
+        ##confidence_by_task_ = {task_id:0 for task_id in range(10)}
+        ##confidence_by_class_ = {class_id:0 for class_id in range(100)}
+        ##for j in range(1000):
+        ##    confidence_by_task_[task_class_[temp_jjj[j]]] += 1
+        ##    confidence_by_class_[temp_jjj[j]] += 1
             
-        print("confidence_by_task_", confidence_by_task_)
-        print("confidence_by_class_", confidence_by_class_)
+        ##print("confidence_by_task_", confidence_by_task_)
+        ##print("confidence_by_class_", confidence_by_class_)
 
         
         runner.next_task(dump_buffer=True)
@@ -220,6 +222,7 @@ if __name__ == '__main__':
     print('ref sample per task\t\t', args.ref_sample_per_task)
     print('seed\t\t', args.seed)
     main(opts=args)
+
 
 
 

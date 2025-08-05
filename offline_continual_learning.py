@@ -129,7 +129,6 @@ def main(opts):
         flattened = [row for sub in runner.buffer.data for row in sub]
 
         print("lennnnn", len(flattened), len(flattened[0]))
-        print("lennnn more", len(flattened[0][0]))
 
         ##for kk in range (1000):
         ##    temp_jjj.append(runner.buffer.data[i][kk][2])
@@ -225,6 +224,7 @@ if __name__ == '__main__':
     print('ref sample per task\t\t', args.ref_sample_per_task)
     print('seed\t\t', args.seed)
     main(opts=args)
+
 
 
 

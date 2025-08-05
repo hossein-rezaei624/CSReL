@@ -125,9 +125,12 @@ def main(opts):
         print("task_class_", task_class_)
     
         temp_jjj = []
-        print("lennnn", len(runner.buffer.data), len(runner.buffer.data[0]), len(runner.buffer.data[0][0]))
-        if i > 0:
-            print("lennnn", len(runner.buffer.data), len(runner.buffer.data[i]), len(runner.buffer.data[0][0]))
+        # lst is your [a][b][c] list
+        flattened = [row for sub in runner.buffer.data for row in sub]
+
+        print("lennnnn", len(flattened), len(flattened[0]))
+        print("lennnn more", len(flattened[0][0]))
+
         ##for kk in range (1000):
         ##    temp_jjj.append(runner.buffer.data[i][kk][2])
 
@@ -222,6 +225,7 @@ if __name__ == '__main__':
     print('ref sample per task\t\t', args.ref_sample_per_task)
     print('seed\t\t', args.seed)
     main(opts=args)
+
 
 
 

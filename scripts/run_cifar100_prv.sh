@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
-local_path='./results/split_cifar100/test0'  # set your output path
+local_path='./results/split_cifar100/test1'  # set your output path
 dataset='splitcifar100'
 setting='der'
 data_path=''
@@ -8,7 +8,7 @@ buffer_size=1000
 alpha=4.0
 beta=0.0
 lr=2e-2
-epochs=3
+epochs=50
 batch_size=32
 mem_batch_size=32
 use_cuda=1
